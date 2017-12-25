@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	 
+    <!-- 服务提供方应用名，用于计算依赖关系 -->  
+    <dubbo:application name="dmw_sys" />  
+    <!-- 定义 zookeeper 注册中心地址及协议 -->  
+    <dubbo:registry address="zookeeper://127.0.0.1:2181" check="false" subscribe="true" register="true"/>
+   
+    <!-- 定义 Dubbo 协议名称及使用的端口，dubbo 协议缺省端口为 20880，如果配置为 -1 或者没有配置 port，则会分配一个没有被占用的端口 -->  
+	<dubbo:protocol name="dubbo" port="20880" />
+	
+	<!-- dubbo依赖延迟加载，解决引用服务时因该服务未启动导致系统启动失败的问题 -->
+	<dubbo:consumer check="false" timeout="5000" retries="0"/>
+	
+	<!-- 延迟到Spring初始化完成后，再暴露服务,服务调用超时设置为6秒,超时不重试-->    
+	<dubbo:provider timeout="5000" delay="-1" retries="0" />
+	
+</beans>
